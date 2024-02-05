@@ -5,14 +5,7 @@ from datetime import datetime
 from threading import Thread
 
 
-def run_iperf(host, port):
-    iperf_result = subprocess.run(['iperf3', '-c', host, '-p', str(port), '--json'], capture_output=True)
-    iperf_stdout = iperf_result.stdout.decode('utf-8', errors='ignore')
-    return iperf_stdout
-
-
 def thread_function(host, port, test_id, results_dict):
-    # iperf_stdout = run_iperf(host, port)
     try:
         iperf_result = subprocess.run(['iperf3', '-c', host, '-p', str(port), '--json'], capture_output=True, timeout=30)
     except subprocess.TimeoutExpired:

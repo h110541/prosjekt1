@@ -13,13 +13,13 @@ def hosts():
 
 @app.route("/api/network-tests")
 def network_tests():
-    return data.network_test_results
+    return data.iperf_results
 
 
 @app.route("/api/network-tests/<test_id>")
 def network_test(test_id):
     try:
-        return data.network_test_results[test_id]
+        return data.iperf_results[test_id]
     except KeyError:
         return {
             "id": test_id,
@@ -30,7 +30,7 @@ def network_test(test_id):
 
 @app.route("/api/network-tests-list")
 def network_tests_list():
-    l = [{'id': x['id'], 'created': x['created'], 'status': x['status']} for x in data.network_test_results.values()]
+    l = [{'id': x['id'], 'created': x['created'], 'status': x['status']} for x in data.iperf_results.values()]
     return sorted(l, key=lambda x: x['created'], reverse=True)
 
 
@@ -38,5 +38,5 @@ def network_tests_list():
 def start_new_test():
     host = request.json["host"]
     port = request.json["port"]
-    test_id = iperf.create_new_test(host, port, data.network_test_results)
+    test_id = iperf.create_new_test(host, port, data.iperf_results)
     return {"test_id": test_id}
